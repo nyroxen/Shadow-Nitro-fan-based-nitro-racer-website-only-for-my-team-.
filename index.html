@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #060913;
-            --card-bg: rgba(21, 26, 38, 0.6);
+            --card-bg: rgba(21, 26, 38, 0.5);
             --card-border: rgba(255, 87, 34, 0.2);
             --accent-orange: #ff5722;
             --accent-gold: #ffcc00;
@@ -20,8 +20,11 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 87, 34, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 204, 0, 0.03) 0%, transparent 40%);
+                linear-gradient(rgba(255, 87, 34, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 87, 34, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 10% 20%, rgba(255, 87, 34, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 204, 0, 0.04) 0%, transparent 40%);
+            background-size: 30px 30px, 30px 30px, 100% 100%, 100% 100%;
             color: var(--text-main);
             margin: 0;
             padding: 0;
@@ -31,15 +34,15 @@
         /* 🏎️ Premium Navigation Bar */
         nav {
             background: rgba(11, 14, 24, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             padding: 15px 20px;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
             gap: 15px;
-            border-bottom: 1px solid rgba(255, 87, 34, 0.3);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 87, 34, 0.25);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
             position: sticky;
             top: 0;
             z-index: 999;
@@ -72,12 +75,11 @@
             background: linear-gradient(135deg, var(--accent-orange), #e03e0d);
             color: #000000;
             border-color: var(--accent-orange);
-            box-shadow: 0 0 15px var(--neon-glow);
+            box-shadow: 0 0 18px var(--neon-glow);
         }
 
-        /* Secrets hiding mechanic */
         #admin-btn {
-            display: none; /* Hidden by default, unlocked by script */
+            display: none; /* Controlled by auth engine */
         }
 
         .container {
@@ -100,10 +102,10 @@
             margin: 0;
             letter-spacing: 4px;
             font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 30%, #ffcc00 70%, var(--accent-orange) 100%);
+            background: linear-gradient(135deg, #ffffff 20%, #ffcc00 65%, var(--accent-orange) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 8px rgba(255, 87, 34, 0.3));
+            filter: drop-shadow(0 4px 12px rgba(255, 87, 34, 0.25));
         }
 
         header p {
@@ -118,25 +120,25 @@
         /* 📢 Glassmorphism Announcement Cards */
         .announcement-box {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-            animation: slideUp 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .announcement-box:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 87, 34, 0.5);
-            box-shadow: 0 15px 35px rgba(255, 87, 34, 0.1);
+            transform: translateY(-5px) scale(1.01);
+            border-color: rgba(255, 87, 34, 0.6);
+            box-shadow: 0 20px 40px rgba(255, 87, 34, 0.12);
         }
 
         .announcement-box.latest {
-            border-left: 4px solid var(--accent-orange);
+            border-left: 5px solid var(--accent-orange);
             border-top-left-radius: 4px;
             border-bottom-left-radius: 4px;
         }
@@ -144,65 +146,73 @@
         .badge {
             display: inline-flex;
             align-items: center;
-            background: rgba(255, 87, 34, 0.15);
+            background: rgba(255, 87, 34, 0.12);
             color: var(--accent-orange);
             border: 1px solid rgba(255, 87, 34, 0.3);
             font-weight: 800;
-            padding: 5px 10px;
+            padding: 5px 12px;
             font-size: 0.75rem;
-            border-radius: 4px;
+            border-radius: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
         .date {
             color: var(--text-darker);
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             float: right;
             margin-top: 5px;
+            background: rgba(255,255,255,0.04);
+            padding: 2px 8px;
+            border-radius: 4px;
         }
 
         .announcement-box h2 {
             margin: 0 0 12px 0;
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .announcement-box p {
-            line-height: 1.7;
-            color: #d1d9e3;
+            line-height: 1.75;
+            color: #d8e2ee;
             margin: 0;
             font-size: 1.05rem;
         }
 
         /* ⚠️ Under Development Banner */
         .dev-tag {
-            background: rgba(255, 204, 0, 0.08);
-            border: 1px dashed rgba(255, 204, 0, 0.4);
+            background: rgba(255, 204, 0, 0.06);
+            border: 1px dashed rgba(255, 204, 0, 0.35);
             color: var(--accent-gold);
-            padding: 15px;
+            padding: 16px;
             text-align: center;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 600;
             margin-bottom: 25px;
             font-size: 0.95rem;
             letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         /* Custom Built-in Chatbox Layout */
         .chat-container {
-            background: rgba(15, 20, 32, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(15, 20, 32, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 87, 34, 0.2);
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
-            height: 480px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            height: 490px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
         }
 
         .chat-messages {
@@ -215,64 +225,66 @@
         }
 
         .message {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             padding: 12px 16px;
             border-radius: 8px;
             border-left: 3px solid var(--accent-orange);
             max-width: 80%;
             word-wrap: break-word;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideUp 0.3s ease;
         }
 
         .msg-user {
             color: var(--accent-gold);
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .msg-text {
             color: #e2e8f0;
-            line-height: 1.5;
+            line-height: 1.55;
         }
 
         .chat-input-area {
             display: flex;
             padding: 20px;
-            background: rgba(8, 11, 18, 0.6);
+            background: rgba(8, 11, 18, 0.7);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             gap: 12px;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
         }
 
         .chat-input-area input {
             flex: 1;
-            background: #080b12;
-            border: 1px solid rgba(255, 87, 34, 0.3);
+            background: #05070d;
+            border: 1px solid rgba(255, 87, 34, 0.25);
             padding: 14px;
             color: white;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
         .chat-input-area input:focus {
             outline: none;
             border-color: var(--accent-orange);
-            box-shadow: 0 0 10px rgba(255, 87, 34, 0.2);
+            box-shadow: 0 0 12px rgba(255, 87, 34, 0.25);
+            background: #080c14;
         }
 
         .chat-input-area button {
-            background: var(--accent-orange);
+            background: linear-gradient(135deg, var(--accent-orange), #e03e0d);
             color: black;
             border: none;
             padding: 0 24px;
             font-weight: 800;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -280,20 +292,21 @@
         }
 
         .chat-input-area button:hover {
-            transform: scale(1.03);
+            transform: scale(1.04);
             box-shadow: 0 0 15px var(--neon-glow);
         }
 
         /* Modern Dashboard Form Cards */
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
             padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-radius: 14px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
             margin-bottom: 30px;
+            transition: border-color 0.3s;
         }
 
         .card h2 {
@@ -306,7 +319,7 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         .form-group label {
@@ -323,21 +336,21 @@
             width: 100%;
             box-sizing: border-box;
             padding: 14px;
-            background: #080b12;
+            background: #05070d;
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: white;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
             border-color: var(--accent-gold);
         }
 
         .form-group textarea {
-            height: 120px;
+            height: 130px;
             resize: vertical;
         }
 
@@ -345,10 +358,10 @@
             background: linear-gradient(135deg, var(--accent-gold), #e6b800);
             color: black;
             border: none;
-            padding: 14px 28px;
+            padding: 15px 30px;
             font-weight: 800;
             font-size: 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             text-transform: uppercase;
             width: 100%;
@@ -357,7 +370,7 @@
         }
 
         .btn-submit:hover {
-            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+            box-shadow: 0 0 22px rgba(255, 204, 0, 0.35);
             transform: translateY(-2px);
         }
 
@@ -365,19 +378,19 @@
         .profile-badge-card {
             font-size: 1.1rem;
             font-weight: 800;
-            padding: 6px 16px;
+            padding: 6px 18px;
             border-radius: 20px;
             display: inline-block;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         .badge-captain {
             background: rgba(255, 204, 0, 0.15);
             color: var(--accent-gold);
             border: 1px solid rgba(255, 204, 0, 0.4);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.12);
         }
 
         .badge-member {
@@ -394,11 +407,16 @@
         }
 
         .stat-box {
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.3);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.02);
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-2px);
         }
 
         .stat-val {
@@ -419,9 +437,9 @@
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 5, 10, 0.92);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(3, 5, 10, 0.94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -435,7 +453,7 @@
         }
 
         .modal-card {
-            background: rgba(21, 26, 38, 0.8);
+            background: rgba(21, 26, 38, 0.85);
             border: 1px solid rgba(255, 87, 34, 0.3);
             padding: 45px;
             border-radius: 16px;
@@ -458,10 +476,10 @@
             width: 100%;
             box-sizing: border-box;
             padding: 14px;
-            background: #080b12;
+            background: #05070d;
             border: 1px solid rgba(255, 87, 34, 0.4);
             color: white;
-            border-radius: 6px;
+            border-radius: 8px;
             margin: 25px 0;
             text-align: center;
             font-size: 1.1rem;
@@ -471,7 +489,7 @@
         .modal-card input:focus {
             outline: none;
             border-color: var(--accent-orange);
-            box-shadow: 0 0 10px rgba(255, 87, 34, 0.3);
+            box-shadow: 0 0 12px rgba(255, 87, 34, 0.3);
         }
 
         .modal-card button {
@@ -481,7 +499,7 @@
             padding: 14px 30px;
             font-weight: 800;
             font-size: 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             text-transform: uppercase;
             width: 100%;
@@ -502,8 +520,8 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(24px); filter: blur(4px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
         .page { display: none; }
@@ -544,23 +562,23 @@
 
                 <!-- 
                 ======================================================================
-                ↓↓↓↓↓↓↓↓↓↓↓↓ POST NEW ANNOUNCEMENTS DIRECTLY BELOW THIS LINE ↓↓↓↓↓↓↓↓↓↓↓↓
+                ↓↓↓↓↓↓↓↓↓↓↓↓ POST NEW ANNOUNCEMENTS DIRECTLY BELOW THIS LINE ↓↓↓↓↓↓↓↓↓↓↓|
                 ======================================================================
                 -->
 
 
-                <!-- <!-- Default Welcome Post ---------------------------------------------------------------------------------------------------------------->
+                <!-- Updated Welcome Post based on image_0edfbc.png -->
                 <div class="announcement-box latest">
                     <span class="badge">TopTrio</span>
                     <span class="date">Pinned</span>
-                    <h2>🏆 Welcome to the team website</h2>
-                    <p>Guys I am trying to make the chat work if it is not possible then we would have no choice but to make discord server to talk.</p>
+                    <h2>🏆 Welcome to my website!</h2>
+                    <p>Soon I am going to make the chat system work and all that etc, transforming this terminal into a live global network for our entire roster!</p>
                 </div>
 
             </div>
         </div>
 
-        <!-- PAGE 2: CHAT LOUNGE (WITH DEVELOPMENT BADGE) -->
+        <!-- PAGE 2: CHAT LOUNGE -->
         <div id="chat-page" class="page">
             <header>
                 <h1>SHADOW NITRO LOUNGE</h1>
@@ -568,14 +586,14 @@
             </header>
 
             <div class="dev-tag">
-                ⚠️ GLOBAL CHAT UNDER DEVELOPMENT!
+                ⚠️ GLOBAL CHAT UNDER DEVELOPMENT: Messages sent here are locally rendered right now. Online database streaming is coming soon!
             </div>
 
             <div class="chat-container">
                 <div class="chat-messages" id="chat-box">
                     <div class="message">
-                        <div class="msg-user">TopTrio</div>
-                        <div class="msg-text">For now no one can talk to you though but soon i would something to fix it.</div>
+                        <div class="msg-user">System Bot</div>
+                        <div class="msg-text">Local sandbox testing terminal activated. Feel free to draft message structures here!</div>
                     </div>
                 </div>
                 <div class="chat-input-area">
@@ -601,7 +619,7 @@
                 <div class="form-group">
                     <label>Notice Badge Type</label>
                     <select id="post-badge">
-                        <option value="announcement">📢 Announcement</option>
+                        <option value="TopTrio">👑 TopTrio Announcement</option>
                         <option value="update">🏎️ Team Update</option>
                         <option value="alert">⚠️ Urgent Alert</option>
                         <option value="event">🏆 Tournament Event</option>
@@ -623,7 +641,7 @@
             </header>
 
             <div class="card" style="text-align: center; position: relative; overflow: hidden;">
-                <div style="font-size: 4.5rem; margin-bottom: 15px;">racer</div>
+                <div style="font-size: 4.5rem; margin-bottom: 15px; filter: drop-shadow(0 4px 10px rgba(255,87,34,0.3));">🏎️</div>
                 <h2 id="profile-name" style="margin: 0; color: #ffffff; font-size: 2.2rem; font-weight: 900;">Racer Name</h2>
                 
                 <!-- Dynamic Privilege Role Tag -->
@@ -699,28 +717,26 @@
             
             document.getElementById("profile-name").innerText = currentRacer;
 
-            // Strict checking for Captain account
             if (currentRacer.toLowerCase() === "toptrio") {
                 userRole = "captain";
-                adminButton.style.display = "flex"; // Unveils tab to TopTrio
+                adminButton.style.display = "flex"; 
                 roleBadge.innerText = "👑 Captain";
                 roleBadge.className = "profile-badge-card badge-captain";
                 fleetType.innerText = "Command Fleet";
             } else {
                 userRole = "member";
-                adminButton.style.display = "none"; // Forces concealment from members
+                adminButton.style.display = "none"; 
                 roleBadge.innerText = "Member";
                 roleBadge.className = "profile-badge-card badge-member";
                 fleetType.innerText = "Shadow Fleet";
                 
-                // Security safety: If a normal member somehow stayed on the admin tab page, bounce them off
                 if (document.getElementById("admin-page").classList.contains("active")) {
                     switchPage('announcements-page', 'announcements-btn');
                 }
             }
         }
 
-        // 📢 Local Storage Announcement Mirroring (For Sandbox Testing)
+        // 📢 Local Storage Announcement Maker
         function publishAnnouncement() {
             if (userRole !== "captain") {
                 alert("Access Denied: Only the Captain can push news feeds!");
@@ -732,13 +748,13 @@
             const content = document.getElementById("post-content").value.trim();
 
             if (title === "" || content === "") {
-                alert("Please pack all broadcast parameters completely!");
+                alert("Please complete the announcement form fields!");
                 return;
             }
 
             const newPost = {
                 title: title,
-                badge: badge.toUpperCase(),
+                badge: badge === "TopTrio" ? "TopTrio" : badge.toUpperCase(),
                 content: content,
                 date: "Just Now"
             };
@@ -760,10 +776,10 @@
             
             let htmlContent = `
                 <div class="announcement-box latest">
-                    <span class="badge">System</span>
+                    <span class="badge">TopTrio</span>
                     <span class="date">Pinned</span>
-                    <h2>🏆 Welcome to the Hub!</h2>
-                    <p>Welcome to the official communication center. Track tournament logs, verify active status tags, and read critical roster alerts straight from this panel.</p>
+                    <h2>🏆 Welcome to my website!</h2>
+                    <p>Soon I am going to make the chat system work and all that etc, transforming this terminal into a live global network for our entire roster!</p>
                 </div>
             `;
 
@@ -791,7 +807,6 @@
             const msgDiv = document.createElement("div");
             msgDiv.className = "message";
             
-            // Captain gets a custom crown symbol next to their name in chat boxes
             const nameDisplay = userRole === "captain" ? `👑 ${currentRacer}` : currentRacer;
             
             msgDiv.innerHTML = `
@@ -810,7 +825,6 @@
 
         // Page Navigation Controller Grid
         function switchPage(pageId, buttonId) {
-            // Guard safety check: Block any manual triggers to admin page unless role matches
             if (pageId === 'admin-page' && userRole !== 'captain') {
                 return;
             }

@@ -28,7 +28,8 @@
             padding: 15px 20px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
             border-bottom: 2px solid var(--accent-orange);
         }
 
@@ -37,7 +38,7 @@
             border: none;
             color: var(--text-main);
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             padding: 8px 16px;
             border-radius: 4px;
             cursor: pointer;
@@ -57,11 +58,11 @@
 
         header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         header h1 {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             color: var(--text-main);
             text-transform: uppercase;
             margin-bottom: 0px;
@@ -86,6 +87,7 @@
             margin-bottom: 25px;
             border-left: 5px solid var(--accent-gold);
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         .announcement-box.latest {
@@ -121,14 +123,27 @@
             margin-bottom: 0;
         }
 
-        /* Built-in Custom Chat Room System */
+        /* ⚠️ Under Development Banner */
+        .dev-tag {
+            background: rgba(255, 204, 0, 0.15);
+            border: 1px dashed var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 12px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        /* Custom Built-in Chatbox Layout */
         .chat-container {
             background: var(--card-bg);
             border: 2px solid rgba(255, 87, 34, 0.3);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
-            height: 500px;
+            height: 450px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
@@ -188,6 +203,93 @@
             border-radius: 4px;
             cursor: pointer;
             text-transform: uppercase;
+        }
+
+        /* 📋 Forms & Dashboard Card Elements */
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            border-top: 3px solid var(--accent-orange);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-darker);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            background: #0e1118;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background: var(--accent-orange);
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        /* 🔑 Profile Stats Grid */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-orange);
+        }
+
+        .stat-lbl {
+            font-size: 0.8rem;
+            color: var(--text-darker);
+            text-transform: uppercase;
+            margin-top: 4px;
         }
 
         /* 🔒 Sign Up Modal Overlay */
@@ -256,54 +358,62 @@
 </head>
 <body>
 
+    <!-- 🔒 One-Time Sign-Up Popup -->
     <div id="signup-modal" class="modal-overlay">
         <div class="modal-card">
             <h2>Join Shadow Nitro</h2>
-            <p style="color: var(--text-darker);">Enter your Nitro Type racer username to unlock the lounge and chat.</p>
+            <p style="color: var(--text-darker);">Enter your Nitro Type racer username to set up your team profile dashboard.</p>
             <input type="text" id="username-input" placeholder="Racer Username" autocomplete="off">
             <button onclick="saveProfile()">Enter Hub</button>
         </div>
     </div>
 
+    <!-- Navigation Bar -->
     <nav>
         <button id="announcements-btn" class="active" onclick="switchPage('announcements-page', 'announcements-btn')">📢 Announcements</button>
         <button id="chat-btn" onclick="switchPage('chat-page', 'chat-btn')">💬 Racer Chat</button>
+        <button id="admin-btn" onclick="switchPage('admin-page', 'admin-btn')">🛠️ Post Announcement</button>
+        <button id="profile-btn" onclick="switchPage('profile-page', 'profile-btn')">👤 My Profile</button>
+        <button id="about-btn" onclick="switchPage('about-page', 'about-btn')">ℹ️ About Us</button>
     </nav>
 
     <div class="container">
         
+        <!-- PAGE 1: ANNOUNCEMENTS BOARD -->
         <div id="announcements-page" class="page active">
             <header>
                 <h1>SHADOW NITRO</h1>
                 <p>A fan based nitro team website</p>
             </header>
 
-            <div class="announcement-box latest">
-                <span class="badge">Latest Result</span>
-                <span class="date">Just Now</span>
-                <h2>🏆 Final Round Complete!</h2>
-                <p>The tournament has officially ended! Everyone did an amazing job pushing their speeds to the limit. Team leadership is currently reviewing the race data to announce our brand new Officer shortly!</p>
-            </div>
-
-            <div class="announcement-box">
-                <span class="badge">Update</span>
-                <span class="date">Yesterday</span>
-                <h2>🏎️ Round 2 Highlights</h2>
-                <p>Round 2 was incredibly fast, with several racers smashing past 100 WPM! The competition for the top slots is razor-thin. Keep up the high energy!</p>
+            <!-- Dynamic Announcements will build here -->
+            <div id="announcements-feed">
+                <div class="announcement-box latest">
+                    <span class="badge">System</span>
+                    <span class="date">Pinned</span>
+                    <h2>🏆 Welcome to the Hub!</h2>
+                    <p>Welcome to the official communication center. Leaders can now instantly broadcast live news feeds, updates, or schedule match events directly from the dashboard panel button above!</p>
+                </div>
             </div>
         </div>
 
+        <!-- PAGE 2: CHAT LOUNGE (WITH DEVELOPMENT BADGE) -->
         <div id="chat-page" class="page">
             <header>
                 <h1>SHADOW NITRO LOUNGE</h1>
                 <p>Discuss the tournament, share typing tips, and chill with the team!</p>
             </header>
 
+            <!-- ⚠️ Under Development Warning Tag -->
+            <div class="dev-tag">
+                ⚠️ GLOBAL CHAT UNDER DEVELOPMENT: Messages sent here are locally rendered right now. Online database streaming is coming soon!
+            </div>
+
             <div class="chat-container">
                 <div class="chat-messages" id="chat-box">
                     <div class="message">
                         <div class="msg-user">System Bot</div>
-                        <div class="msg-text">Welcome to the lounge! Type below to chat with the team.</div>
+                        <div class="msg-text">Local sandbox testing terminal activated. Feel free to draft message structures here!</div>
                     </div>
                 </div>
                 <div class="chat-input-area">
@@ -313,44 +423,178 @@
             </div>
         </div>
 
+        <!-- PAGE 3: DYNAMIC SITE ANNOUNCEMENT CREATOR -->
+        <div id="admin-page" class="page">
+            <header>
+                <h1>BROADCAST DESK</h1>
+                <p>Post updates directly to the homepage instantly</p>
+            </header>
+
+            <div class="card">
+                <h2>Create Live Notice</h2>
+                <div class="form-group">
+                    <label>Notice Headline Title</label>
+                    <input type="text" id="post-title" placeholder="e.g., Weekend Tournament Kickoff!">
+                </div>
+                <div class="form-group">
+                    <label>Notice Badge Type</label>
+                    <select id="post-badge">
+                        <option value="announcement">📢 Announcement</option>
+                        <option value="update">🏎️ Team Update</option>
+                        <option value="alert">⚠️ Urgent Alert</option>
+                        <option value="event">🏆 Tournament Event</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Broadcast Message Context</label>
+                    <textarea id="post-content" placeholder="Type out what you want to communicate to your entire racing roster..."></textarea>
+                </div>
+                <button class="btn-submit" onclick="publishAnnouncement()">Publish News Stream</button>
+            </div>
+        </div>
+
+        <!-- PAGE 4: USER MEMBER PROFILE -->
+        <div id="profile-page" class="page">
+            <header>
+                <h1>RACER CARD</h1>
+                <p>Your saved club membership credentials</p>
+            </header>
+
+            <div class="card" style="text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 10px;">🏎️</div>
+                <h2 id="profile-name" style="margin-bottom: 5px; color: var(--accent-orange);">Racer Name</h2>
+                <p style="color: var(--text-darker); margin-top: 0; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px;">Active Team Member</p>
+                
+                <div class="profile-grid">
+                    <div class="stat-box">
+                        <div class="stat-val" id="profile-badge-type">Shadow Nitro</div>
+                        <div class="stat-lbl">Assigned Fleet</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-val" style="color: var(--accent-gold);">Online</div>
+                        <div class="stat-lbl">Hub Status</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 5: CREDITS & ABOUT SITE -->
+        <div id="about-page" class="page">
+            <header>
+                <h1>ABOUT THIS HUB</h1>
+                <p>Platform distribution details</p>
+            </header>
+
+            <div class="card" style="line-height: 1.8; color: #d1d9e3;">
+                <h2>Project Information</h2>
+                <p>This application was conceptualized and developed entirely by <strong>TopTrio</strong>.</p>
+                <p>This is a purely <strong>fan-based website</strong> constructed strictly for the racing teammates of <strong>Shadow Nitro</strong>. It acts as an internal notice dashboard and general community chill space to communicate status logs, schedule league grids, and update rosters.</p>
+                <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+                <div style="text-align: center; color: var(--text-darker); font-size: 0.85rem;">
+                    Shadow Nitro Hub &copy; 2026 | Built by TopTrio
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // Track the user's username
         let currentRacer = "";
 
-        // Check if user already signed up before
         window.onload = function() {
             const savedUser = localStorage.getItem("shadowNitroUser");
             if (!savedUser) {
-                // Show registration popup if new
                 document.getElementById("signup-modal").classList.add("show");
             } else {
                 currentRacer = savedUser;
+                updateProfileUI();
             }
+            loadLocalAnnouncements();
         };
 
-        // Save sign-up details permanently on their browser
         function saveProfile() {
             const nameInput = document.getElementById("username-input").value.trim();
             if (nameInput === "") {
-                alert("Please enter a valid username!");
+                alert("Please enter your racer profile name!");
                 return;
             }
             localStorage.setItem("shadowNitroUser", nameInput);
             currentRacer = nameInput;
+            updateProfileUI();
             document.getElementById("signup-modal").classList.remove("show");
         }
 
-        // Handle sending messages
+        function updateProfileUI() {
+            document.getElementById("profile-name").innerText = currentRacer;
+        }
+
+        // 📢 Live In-Website Announcement Publisher System
+        function publishAnnouncement() {
+            const title = document.getElementById("post-title").value.trim();
+            const badge = document.getElementById("post-badge").value;
+            const content = document.getElementById("post-content").value.trim();
+
+            if (title === "" || content === "") {
+                alert("Please pack all broadcast layout metrics completely!");
+                return;
+            }
+
+            const newPost = {
+                title: title,
+                badge: badge.toUpperCase(),
+                content: content,
+                date: "Just Now"
+            };
+
+            // Grab existing local storage pool or start fresh
+            let notices = JSON.parse(localStorage.getItem("teamNotices")) || [];
+            notices.unshift(newPost); // Add new post to top
+            localStorage.setItem("teamNotices", JSON.stringify(notices));
+
+            // Clear input forms
+            document.getElementById("post-title").value = "";
+            document.getElementById("post-content").value = "";
+
+            // Refresh UI feed and push user to front page to check it out!
+            loadLocalAnnouncements();
+            switchPage('announcements-page', 'announcements-btn');
+        }
+
+        function loadLocalAnnouncements() {
+            const feed = document.getElementById("announcements-feed");
+            let notices = JSON.parse(localStorage.getItem("teamNotices")) || [];
+            
+            // Retain default welcome post layout
+            let htmlContent = `
+                <div class="announcement-box latest">
+                    <span class="badge">System</span>
+                    <span class="date">Pinned</span>
+                    <h2>🏆 Welcome to the Hub!</h2>
+                    <p>Welcome to the official communication center. Leaders can now instantly broadcast live news feeds, updates, or schedule match events directly from the dashboard panel button above!</p>
+                </div>
+            `;
+
+            notices.forEach(item => {
+                htmlContent += `
+                    <div class="announcement-box">
+                        <span class="badge">${item.badge}</span>
+                        <span class="date">${item.date}</span>
+                        <h2>${item.title}</h2>
+                        <p>${item.content}</p>
+                    </div>
+                `;
+            });
+
+            feed.innerHTML = htmlContent;
+        }
+
+        // Local Sandbox Messaging Loop
         function sendMessage() {
             const input = document.getElementById("msg-input");
             const text = input.value.trim();
             if (text === "") return;
 
             const chatBox = document.getElementById("chat-box");
-            
-            // Build the message element
             const msgDiv = document.createElement("div");
             msgDiv.className = "message";
             msgDiv.innerHTML = `
@@ -359,15 +603,15 @@
             `;
             
             chatBox.appendChild(msgDiv);
-            input.value = ""; // Clear box
-            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll down
+            input.value = ""; 
+            chatBox.scrollTop = chatBox.scrollHeight; 
         }
 
         function handleKeyPress(e) {
             if (e.key === 'Enter') sendMessage();
         }
 
-        // Tab Switching
+        // Page Navigation Menu Config
         function switchPage(pageId, buttonId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(button => button.classList.remove('active'));

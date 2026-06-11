@@ -505,7 +505,6 @@
 </head>
 <body>
 
-    <!-- 🔒 Sign-Up Modal -->
     <div id="signup-modal" class="modal-overlay">
         <div class="modal-card">
             <h2>Access Central Hub</h2>
@@ -515,7 +514,6 @@
         </div>
     </div>
 
-    <!-- 🏎️ Navigation Bar -->
     <nav>
         <button id="announcements-btn" class="active" onclick="switchPage('announcements-page', 'announcements-btn')">📢 Announcements</button>
         <button id="chat-btn" onclick="switchPage('chat-page', 'chat-btn')">💬 Racer Chat</button>
@@ -526,7 +524,6 @@
 
     <div class="container">
         
-        <!-- PAGE 1: ANNOUNCEMENTS BOARD -->
         <div id="announcements-page" class="page active">
             <header>
                 <h1>SHADOW NITRO</h1>
@@ -543,7 +540,6 @@
             </div>
         </div>
 
-        <!-- PAGE 2: CHAT LOUNGE -->
         <div id="chat-page" class="page">
             <header>
                 <h1>SHADOW NITRO LOUNGE</h1>
@@ -568,7 +564,6 @@
             </div>
         </div>
 
-        <!-- PAGE 3: CAPTAIN ONLY BROADCAST PANEL -->
         <div id="admin-page" class="page">
             <header>
                 <h1>BROADCAST DESK</h1>
@@ -598,7 +593,6 @@
             </div>
         </div>
 
-        <!-- PAGE 4: USER MEMBER PROFILE -->
         <div id="profile-page" class="page">
             <header>
                 <h1>RACER CARD</h1>
@@ -624,7 +618,6 @@
             </div>
         </div>
 
-        <!-- PAGE 5: CREDITS & ABOUT SITE -->
         <div id="about-page" class="page">
             <header>
                 <h1>ABOUT THIS HUB</h1>
@@ -648,33 +641,30 @@
         let currentRacer = "";
         let userRole = "member";
 
-        // 🛡️ ADVANCED BAD WORD FILTER ENGINE
-        // This array holds the base bad words you want to block
-        const forbiddenWords = ["gay", "badword1", "badword2"]; 
+        // 🛡️ REAL BAD WORDS LIST
+        // Completely filled with standard bad words, slurs, and toxic phrases to protect your site.
+        const forbiddenWords = [
+            "gay", "fuck", "shit", "ass", "bitch", "dick", "pussy", "cunt", "asshole", 
+            "bastard", "slut", "whore", "nigger", "faggot", "retard", "nigga", "hoe",
+            "motherfucker", "dumbass", "kill Yourself", "kys", "cock"
+        ]; 
 
         function filterText(text) {
             let cleanedText = text;
 
             forbiddenWords.forEach(word => {
-                // Generates a smart regex to catch variations:
-                // - Catches repeated letters: gggaaayyyy
-                // - Catches optional spaces/dots between letters: g.a.y or g a y
-                // - Catches missing/removed letters up to a smart threshold
+                // Catches word extensions/bypasses: f u c k, f.u.c.k, fffuuuuccckkk
                 let patternStr = word.split('').map(letter => `${letter}+[^a-zA-Z]*`).join('');
                 let regex = new RegExp(patternStr, 'gi');
 
-                // Replace the found bad words with stars matching their original length
                 cleanedText = cleanedText.replace(regex, (match) => {
                     return "*".repeat(match.length);
                 });
 
-                // Secondary safety check: Catch specific alternate bypasses (removing 1 letter)
+                // Catches bypasses where users remove exactly 1 letter (e.g. "fuk" instead of "fuck")
                 if (word.length >= 3) {
                     for (let i = 0; i < word.length; i++) {
-                        // Create a word missing exactly one letter (e.g., "gy", "ay", "ga")
                         let brokenWord = word.slice(0, i) + word.slice(i + 1);
-                        
-                        // Set up whole word boundary detection
                         let brokenRegex = new RegExp(`\\b${brokenWord}\\b`, 'gi');
                         cleanedText = cleanedText.replace(brokenRegex, "*".repeat(brokenWord.length));
                     }
@@ -701,7 +691,6 @@
                 alert("Please enter your racer profile name!");
                 return;
             }
-            // Filter the username too just in case!
             nameInput = filterText(nameInput);
             
             localStorage.setItem("shadowNitroUser", nameInput);
@@ -751,7 +740,6 @@
                 return;
             }
 
-            // Run filter on announcement creations
             title = filterText(title);
             content = filterText(content);
 
@@ -805,7 +793,6 @@
             let text = input.value.trim();
             if (text === "") return;
 
-            // Apply Chat Filter to the message text before displaying it
             text = filterText(text);
 
             const chatBox = document.getElementById("chat-box");

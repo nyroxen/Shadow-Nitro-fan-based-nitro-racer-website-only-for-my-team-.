@@ -79,7 +79,7 @@
         }
 
         #admin-btn {
-            display: none; /* Controlled by auth engine */
+            display: none; 
         }
 
         .container {
@@ -306,7 +306,6 @@
             border-radius: 14px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
             margin-bottom: 30px;
-            transition: border-color 0.3s;
         }
 
         .card h2 {
@@ -342,11 +341,6 @@
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--accent-gold);
         }
 
         .form-group textarea {
@@ -412,11 +406,6 @@
             border-radius: 10px;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.02);
-            transition: transform 0.3s;
-        }
-
-        .stat-box:hover {
-            transform: translateY(-2px);
         }
 
         .stat-val {
@@ -486,12 +475,6 @@
             font-weight: 600;
         }
 
-        .modal-card input:focus {
-            outline: none;
-            border-color: var(--accent-orange);
-            box-shadow: 0 0 12px rgba(255, 87, 34, 0.3);
-        }
-
         .modal-card button {
             background: linear-gradient(135deg, var(--accent-orange), #e03e0d);
             color: black;
@@ -513,16 +496,8 @@
             box-shadow: 0 6px 20px var(--neon-glow);
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(24px); filter: blur(4px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.4s ease; }
@@ -530,7 +505,7 @@
 </head>
 <body>
 
-    <!-- 🔒 Sign-Up Authentication Popup -->
+    <!-- 🔒 Sign-Up Modal -->
     <div id="signup-modal" class="modal-overlay">
         <div class="modal-card">
             <h2>Access Central Hub</h2>
@@ -559,22 +534,12 @@
             </header>
 
             <div id="announcements-feed">
-
-                <!-- 
-                ======================================================================
-                ↓↓↓↓↓↓↓↓↓↓↓↓ POST NEW ANNOUNCEMENTS DIRECTLY BELOW THIS LINE ↓↓↓↓↓↓↓↓↓↓↓|
-                ======================================================================
-                -->
-
-
-                <!-- Updated Welcome Post based on image_0edfbc.png -->
                 <div class="announcement-box latest">
                     <span class="badge">TopTrio</span>
                     <span class="date">Pinned</span>
                     <h2>🏆 Welcome to my website!</h2>
                     <p>Soon I am going to make the chat system work and all that etc, transforming this terminal into a live global network for our entire roster!</p>
                 </div>
-
             </div>
         </div>
 
@@ -644,10 +609,7 @@
                 <div style="font-size: 4.5rem; margin-bottom: 15px; filter: drop-shadow(0 4px 10px rgba(255,87,34,0.3));">🏎️</div>
                 <h2 id="profile-name" style="margin: 0; color: #ffffff; font-size: 2.2rem; font-weight: 900;">Racer Name</h2>
                 
-                <!-- Dynamic Privilege Role Tag -->
-                <div id="profile-role-badge" class="profile-badge-card badge-member">
-                    Member
-                </div>
+                <div id="profile-role-badge" class="profile-badge-card badge-member">Member</div>
                 
                 <div class="profile-grid">
                     <div class="stat-box">
@@ -686,6 +648,42 @@
         let currentRacer = "";
         let userRole = "member";
 
+        // 🛡️ ADVANCED BAD WORD FILTER ENGINE
+        // This array holds the base bad words you want to block
+        const forbiddenWords = ["gay", "badword1", "badword2"]; 
+
+        function filterText(text) {
+            let cleanedText = text;
+
+            forbiddenWords.forEach(word => {
+                // Generates a smart regex to catch variations:
+                // - Catches repeated letters: gggaaayyyy
+                // - Catches optional spaces/dots between letters: g.a.y or g a y
+                // - Catches missing/removed letters up to a smart threshold
+                let patternStr = word.split('').map(letter => `${letter}+[^a-zA-Z]*`).join('');
+                let regex = new RegExp(patternStr, 'gi');
+
+                // Replace the found bad words with stars matching their original length
+                cleanedText = cleanedText.replace(regex, (match) => {
+                    return "*".repeat(match.length);
+                });
+
+                // Secondary safety check: Catch specific alternate bypasses (removing 1 letter)
+                if (word.length >= 3) {
+                    for (let i = 0; i < word.length; i++) {
+                        // Create a word missing exactly one letter (e.g., "gy", "ay", "ga")
+                        let brokenWord = word.slice(0, i) + word.slice(i + 1);
+                        
+                        // Set up whole word boundary detection
+                        let brokenRegex = new RegExp(`\\b${brokenWord}\\b`, 'gi');
+                        cleanedText = cleanedText.replace(brokenRegex, "*".repeat(brokenWord.length));
+                    }
+                }
+            });
+
+            return cleanedText;
+        }
+
         window.onload = function() {
             const savedUser = localStorage.getItem("shadowNitroUser");
             if (!savedUser) {
@@ -698,18 +696,20 @@
         };
 
         function saveProfile() {
-            const nameInput = document.getElementById("username-input").value.trim();
+            let nameInput = document.getElementById("username-input").value.trim();
             if (nameInput === "") {
                 alert("Please enter your racer profile name!");
                 return;
             }
+            // Filter the username too just in case!
+            nameInput = filterText(nameInput);
+            
             localStorage.setItem("shadowNitroUser", nameInput);
             currentRacer = nameInput;
             evaluatePrivileges();
             document.getElementById("signup-modal").classList.remove("show");
         }
 
-        // 👑 Role Permission Engine
         function evaluatePrivileges() {
             const adminButton = document.getElementById("admin-btn");
             const roleBadge = document.getElementById("profile-role-badge");
@@ -736,21 +736,24 @@
             }
         }
 
-        // 📢 Local Storage Announcement Maker
         function publishAnnouncement() {
             if (userRole !== "captain") {
-                alert("Access Denied: Only the Captain can push news feeds!");
+                alert("Access Denied!");
                 return;
             }
 
-            const title = document.getElementById("post-title").value.trim();
+            let title = document.getElementById("post-title").value.trim();
             const badge = document.getElementById("post-badge").value;
-            const content = document.getElementById("post-content").value.trim();
+            let content = document.getElementById("post-content").value.trim();
 
             if (title === "" || content === "") {
-                alert("Please complete the announcement form fields!");
+                alert("Please fill out the form completely!");
                 return;
             }
+
+            // Run filter on announcement creations
+            title = filterText(title);
+            content = filterText(content);
 
             const newPost = {
                 title: title,
@@ -797,11 +800,13 @@
             feed.innerHTML = htmlContent;
         }
 
-        // Local Chat Box Loop
         function sendMessage() {
             const input = document.getElementById("msg-input");
-            const text = input.value.trim();
+            let text = input.value.trim();
             if (text === "") return;
+
+            // Apply Chat Filter to the message text before displaying it
+            text = filterText(text);
 
             const chatBox = document.getElementById("chat-box");
             const msgDiv = document.createElement("div");
@@ -823,11 +828,8 @@
             if (e.key === 'Enter') sendMessage();
         }
 
-        // Page Navigation Controller Grid
         function switchPage(pageId, buttonId) {
-            if (pageId === 'admin-page' && userRole !== 'captain') {
-                return;
-            }
+            if (pageId === 'admin-page' && userRole !== 'captain') return;
 
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(button => button.classList.remove('active'));
